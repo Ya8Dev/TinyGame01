@@ -20,7 +20,7 @@
     <button id="check" type="button">判定</button>
     <button id="reset" type="button">リセット</button>
     <p id="message">ゲーム開始！</p>
-    <p>残り回数: <span id="attempts">3</span></p>
+    <p>残り回数: <span id="attempts"></span></p>
   </main>
 
   <script>
@@ -32,9 +32,10 @@
 
     const MIN_NUMBER = 1;
     const MAX_NUMBER = 20;
+    const MAX_ATTEMPTS = 3;
 
     let answer = Math.floor(Math.random() * MAX_NUMBER) + MIN_NUMBER;
-    let attemptsLeft = 3;
+    let attemptsLeft = MAX_ATTEMPTS;
     let gameOver = false;
 
     function updateAttempts() {
@@ -73,12 +74,14 @@
 
     resetButton.addEventListener("click", () => {
       answer = Math.floor(Math.random() * MAX_NUMBER) + MIN_NUMBER;
-      attemptsLeft = 3;
+      attemptsLeft = MAX_ATTEMPTS;
       gameOver = false;
       guessInput.value = "";
       message.textContent = "新しいゲームを開始しました！";
       updateAttempts();
     });
+
+    updateAttempts();
   </script>
 </body>
 </html>
