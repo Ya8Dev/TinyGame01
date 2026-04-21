@@ -35,7 +35,11 @@
     const MAX_NUMBER = 20;
     const MAX_ATTEMPTS = 3;
 
-    let answer = Math.floor(Math.random() * MAX_NUMBER) + MIN_NUMBER;
+    function generateAnswer() {
+      return Math.floor(Math.random() * (MAX_NUMBER - MIN_NUMBER + 1)) + MIN_NUMBER;
+    }
+
+    let answer = generateAnswer();
     let attemptsLeft = MAX_ATTEMPTS;
     let gameOver = false;
 
@@ -74,7 +78,7 @@
     });
 
     resetButton.addEventListener("click", () => {
-      answer = Math.floor(Math.random() * MAX_NUMBER) + MIN_NUMBER;
+      answer = generateAnswer();
       attemptsLeft = MAX_ATTEMPTS;
       gameOver = false;
       guessInput.value = "";
