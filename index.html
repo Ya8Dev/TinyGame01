@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TinyGame01 - 数字当てゲーム</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    .container { max-width: 420px; }
+    input, button { font-size: 1rem; padding: 0.5rem; }
+    #message { margin-top: 1rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>数字当てゲーム</h1>
+    <p id="rule"></p>
+    <label for="guess">予想:</label>
+    <input id="guess" type="number" />
+    <button id="check" type="button">判定</button>
+    <button id="reset" type="button">リセット</button>
+    <p id="message">ゲーム開始！</p>
+    <p>残り回数: <span id="attempts"></span></p>
+  </main>
+
+  <script>
+    const guessInput = document.getElementById("guess");
+    const checkButton = document.getElementById("check");
+    const resetButton = document.getElementById("reset");
+    const message = document.getElementById("message");
+    const attemptsText = document.getElementById("attempts");
+    const ruleText = document.getElementById("rule");
+
+    const MIN_NUMBER = 1;
+    const MAX_NUMBER = 20;
+    const MAX_ATTEMPTS = 3;
+
+    function generateAnswer() {
+      return Math.floor(Math.random() * (MAX_NUMBER - MIN_NUMBER + 1)) + MIN_NUMBER;
+    }
+
+    let answer = generateAnswer();
+    let attemptsLeft = MAX_ATTEMPTS;
+    let gameOver = false;
+
+    function updateAttempts() {
+      attemptsText.textContent = String(attemptsLeft);
+    }
+
+    function endGame(text) {
+      message.textContent = text + ` 正解は ${answer} でした。`;
+      gameOver = true;
+    }
+
+    checkButton.addEventListener("click", () => {
+      if (gameOver) return;
+      const value = Number(guessInput.value);
+      if (!Number.isInteger(value) || value < MIN_NUMBER || value > MAX_NUMBER) {
+        message.textContent = `${MIN_NUMBER}〜${MAX_NUMBER}の整数を入力してください。`;
+        return;
+      }
+
+      attemptsLeft -= 1;
+      updateAttempts();
+
+      if (value === answer) {
+        message.textContent = "正解です！おめでとう！";
+        gameOver = true;
+        return;
+      }
+
+      if (attemptsLeft === 0) {
+        endGame("残念！");
+        return;
+      }
+
+      message.textContent = value < answer ? "もっと大きい数字です。" : "もっと小さい数字です。";
+    });
+
+    resetButton.addEventListener("click", () => {
+      answer = generateAnswer();
+      attemptsLeft = MAX_ATTEMPTS;
+      gameOver = false;
+      guessInput.value = "";
+      message.textContent = "新しいゲームを開始しました！";
+      updateAttempts();
+    });
+
+    updateAttempts();
+    guessInput.min = String(MIN_NUMBER);
+    guessInput.max = String(MAX_NUMBER);
+    ruleText.textContent = `${MIN_NUMBER}〜${MAX_NUMBER}の数字を${MAX_ATTEMPTS}回以内に当ててください。`;
+  </script>
+</body>
+</html>
